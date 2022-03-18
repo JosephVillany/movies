@@ -1,13 +1,11 @@
-const { Review } = require('../models/review.model')
+const { Movie } = require('../models/review.model')
 
-exports.getAllReview = async ( req, res) => {
+exports.getAllMovie = async ( req, res) => {
     try {
-        const review = await Review.findAll({
+        const review = await Movie.findAll({
             where: {status: 'active'} 
         })
 
-        //if(user.length === 0){
-        //console.log(user);
         if(!review){
             res.status(400).json({
                 status: 'error',
@@ -19,7 +17,7 @@ exports.getAllReview = async ( req, res) => {
         res.status(201).json({
             status: 'success',
             data: {
-                review
+                movie
             }
         })
     } catch (error) {
@@ -27,10 +25,10 @@ exports.getAllReview = async ( req, res) => {
     }
 }
 
-exports.getReviewById = async (req, res) => {
+exports.getMovieById = async (req, res) => {
     try {
         const { id } = req.params
-        const user = await Review.findOne({
+        const movie = await Movie.findOne({
             where: {id: id, status: 'active'}
         })
 
@@ -44,7 +42,7 @@ exports.getReviewById = async (req, res) => {
         res.status(200).json({
             status: 'success',
             data: {
-                review
+                movie
             }
         })
 
@@ -53,21 +51,23 @@ exports.getReviewById = async (req, res) => {
     }
 }
 
-exports.createReview = async (req, res) => {
+exports.createMovie = async (req, res) => {
     try {
-        const { title, comment, rating, userId, movieId } = req.body
+        const { title, description, duration, rating, img, genre } = req.body
         const review = await Review.create({
             title: title,
             comment: comment,
             rating: rating, 
             userId: userId,
-            movieId: movieId
+            movieId: movieId,
+            img: img,
+            genre: genre
         })
 
         res.status(200).json({
             status: 'success',
             data: {
-                review
+                movie
             }
         })
 

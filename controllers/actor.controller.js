@@ -1,14 +1,12 @@
-const { Review } = require('../models/review.model')
+const { Actor } = require('../models/review.model')
 
-exports.getAllReview = async ( req, res) => {
+exports.getAllActor = async ( req, res) => {
     try {
-        const review = await Review.findAll({
+        const actor = await Actor.findAll({
             where: {status: 'active'} 
         })
 
-        //if(user.length === 0){
-        //console.log(user);
-        if(!review){
+        if(!actor){
             res.status(400).json({
                 status: 'error',
                 message: 'There are not users until'
@@ -19,7 +17,7 @@ exports.getAllReview = async ( req, res) => {
         res.status(201).json({
             status: 'success',
             data: {
-                review
+                actor
             }
         })
     } catch (error) {
@@ -27,14 +25,14 @@ exports.getAllReview = async ( req, res) => {
     }
 }
 
-exports.getReviewById = async (req, res) => {
+exports.getActorById = async (req, res) => {
     try {
         const { id } = req.params
-        const user = await Review.findOne({
+        const actor = await Actor.findOne({
             where: {id: id, status: 'active'}
         })
 
-        if(!review) {
+        if(!actor) {
             res.status(404).json({
                 status: 'error',
                 message: `The id ${id} selected was not found`
@@ -44,7 +42,7 @@ exports.getReviewById = async (req, res) => {
         res.status(200).json({
             status: 'success',
             data: {
-                review
+                actor
             }
         })
 
@@ -53,21 +51,21 @@ exports.getReviewById = async (req, res) => {
     }
 }
 
-exports.createReview = async (req, res) => {
+exports.createActor = async (req, res) => {
     try {
-        const { title, comment, rating, userId, movieId } = req.body
-        const review = await Review.create({
-            title: title,
-            comment: comment,
+        const { name, country, rating,  age, profilePic } = req.body
+        const actor = await Actor.create({
+            name: name,
+            country: country,
             rating: rating, 
-            userId: userId,
-            movieId: movieId
+            age: age,
+            profilePic: profilePic
         })
 
         res.status(200).json({
             status: 'success',
             data: {
-                review
+                actor
             }
         })
 
