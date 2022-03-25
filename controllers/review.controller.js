@@ -1,44 +1,33 @@
-const { Review } = require('../models/review.model')
+const { Review } = require('../models/reviews.model');
+const { AppError } = require('../utils/appError');
+const { catchAsync } = require('../utils/catchAsync')
 
-exports.getAllReview = async ( req, res) => {
-    try {
-        const review = await Review.findAll({
-            where: {status: 'active'} 
-        })
+exports.getAllReview = catchAsync( async ( req, res, next) => {
+    const review = await Review.findAll({
+        where: {status: 'active'} 
+    })
 
-        //if(user.length === 0){
-        //console.log(user);
-        if(!review){
-            res.status(400).json({
-                status: 'error',
-                message: 'There are not users until'
-            })
-            return
-        }
-
-        res.status(201).json({
-            status: 'success',
-            data: {
-                review
-            }
-        })
-    } catch (error) {
-        console.log(error);
+    //if(!review){
+    if(review.length === 0){
+        return next(new AppError (404, 'There are not review until'));
     }
-}
 
-exports.getReviewById = async (req, res) => {
-    try {
+    res.status(201).json({
+        status: 'success',
+        data: {
+            review
+        }
+    })
+}) 
+
+exports.getReviewById = catchAsync( async (req, res, next) => {
         const { id } = req.params
-        const user = await Review.findOne({
+        const review = await Review.findOne({
             where: {id: id, status: 'active'}
         })
 
         if(!review) {
-            res.status(404).json({
-                status: 'error',
-                message: `The id ${id} selected was not found`
-            })
+            return next(new AppError (404, `The id ${id} selected was not found`));
         }
 
         res.status(200).json({
@@ -47,20 +36,22 @@ exports.getReviewById = async (req, res) => {
                 review
             }
         })
+})
 
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-exports.createReview = async (req, res) => {
-    try {
+exports.createReview = catchAsync( async (req, res, next) => {
         const { title, comment, rating, userId, movieId } = req.body
+        if(!title || 
+            !comment || 
+            !rating || 
+            !userId ||
+            !movieId ){
+                return next(new AppError (404, 'Verify the properties and their content'));
+                }
         const review = await Review.create({
             title: title,
-            comment: comment,
+            comment: comment, 
             rating: rating, 
-            userId: userId,
+            userId: userId, 
             movieId: movieId
         })
 
@@ -70,9 +61,4 @@ exports.createReview = async (req, res) => {
                 review
             }
         })
-
-    } catch (error) {
-        console.log(error);
-    }
-
-}
+})

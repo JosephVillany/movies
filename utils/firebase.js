@@ -1,5 +1,5 @@
 const { initializeApp } = require("firebase/app");
-
+const {getStorage}= require("firebase/storage")
 const firebaseConfig = {
   apiKey: "AIzaSyBQO0hmdDDE6kklf1npNGrJ4fQIk2Larfo",
   authDomain: "multer-project-2cd54.firebaseapp.com",
@@ -11,4 +11,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebase = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp)
+
+module.exports = { storage }
