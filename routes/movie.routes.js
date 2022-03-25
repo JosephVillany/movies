@@ -6,20 +6,30 @@ const {
     updateMovie,
     deleteMovie
 } = require('../controllers/movies.controller')
+const { validateSession } = require('../middlewares/auth.middlewares')
+const { movieExists, protectAccountOwner } = require('../middlewares/movies.middlewares')
 const { upload } = require('../utils/multer')
 
 
 const router = express.Router() 
 
-router.get('/', getAllMovies)
+router.use(validateSession )
 
-router.get('/:id', getMovieById)
+router.get('/', getAllMovies)
 
 router.post('/', upload.single('imgUrl'), createMovie)
 
+
+router
+  .use('/:id', movieExists)
+  .route('/:id')
+  .get(getMovieById)
+  .patch(protectAccountOwner, updateMovie)
+  .delete(protectAccountOwner, deleteMovie);
+
+/* router.get('/:id', getMovieById)
 router.patch('/:id', updateMovie)
-
 router.delete('/:id', deleteMovie)
-
+ */
 
 module.exports = {movieRouter: router}
