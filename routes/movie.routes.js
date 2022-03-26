@@ -6,7 +6,7 @@ const {
     updateMovie,
     deleteMovie
 } = require('../controllers/movies.controller')
-const { validateSession } = require('../middlewares/auth.middlewares')
+const { validateSession, protectAdmin } = require('../middlewares/auth.middlewares')
 const { movieExists, protectAccountOwner } = require('../middlewares/movies.middlewares')
 const { upload } = require('../utils/multer')
 
@@ -17,7 +17,7 @@ router.use(validateSession )
 
 router.get('/', getAllMovies)
 
-router.post('/', upload.single('imgUrl'), createMovie)
+router.post('/', protectAdmin, upload.single('imgUrl'), createMovie)
 
 
 router

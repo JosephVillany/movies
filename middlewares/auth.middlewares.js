@@ -47,9 +47,18 @@ exports.validateSession = catchAsync(
       return next(new AppError(401, 'Invalid session'));
     }
 
-    console.log(user);
+    req.currentUser = user
 
     // Grant access
     next();
   }
 );
+
+exports.protectAdmin = catchAsync(async(req, res, next) =>{
+console.log(req.currentUser.role);
+  if(req.currentUser.role !== 'admin'){
+    return next(new AppError(403, 'Access denied'))
+  }
+
+  next()
+})

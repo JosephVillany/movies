@@ -14,10 +14,14 @@ const { userExists } = require('../middlewares/users.middleware');
 
 const router = express.Router();
 
-router.get('/', validateSession, getAllUsers);
-
+router.post('/login', loginUser);
 
 router.post('/', createUser);
+
+router.use(validateSession)
+
+router.get('/', getAllUsers);
+
 
 router
   .use('/:id', userExists)
@@ -26,7 +30,5 @@ router
   .patch(protectAccountOwner, updateUser)
   .delete(protectAccountOwner, deleteUser);
 
-
-router.post('/login', loginUser);
 
 module.exports = { usersRouter: router };

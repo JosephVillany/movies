@@ -44,7 +44,7 @@ exports.getMovieById = catchAsync(async (req, res, next) => {
 });
 
 exports.createMovie = catchAsync(async (req, res, next) => {
-    console.log("error de imagen firebase")
+
   const { title, description, duration, rating, imgUrl, genre } = req.body;
   if (!title || !description || !duration || !rating  || !genre) {
     return next(new AppError(404, 'Verify the properties and their content'));

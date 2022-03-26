@@ -2,10 +2,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
-const { User } = require('../models/users.model');
+//const { User } = require('../models/users.model');
 const { AppError } = require('../utils/appError');
 const { catchAsync } = require('../utils/catchAsync');
 const { filterObj } = require('../utils/filterObj');
+const { User } = require('../models/users.model');
 
 dotenv.config({ path: './config.env' });
 
@@ -129,9 +130,12 @@ exports.deleteUser = catchAsync( async(req, res, next) => {
 
 
 exports.loginUser = catchAsync( async (req, res, next) =>{
+
+  console.log("joseph");
+
   const { email, password } = req.body
   const user = await User.findOne({
-    where: {status: 'active'}
+    where: { email,  status: 'active'}
   })
 
    // Compare entered password vs hashed password
